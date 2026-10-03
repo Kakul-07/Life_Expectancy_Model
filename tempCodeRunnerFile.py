@@ -1,0 +1,10 @@
+selected_features=["HIV/AIDS",
+ "Adult Mortality",
+ "Income composition of resources",
+ "BMI",
+ "under-five deaths",
+ "thinness 5-9 years",
+ "Year",        
+"Schooling",
+"Country",
+"Alcohol"]
