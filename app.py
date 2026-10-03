@@ -13,7 +13,7 @@ from sklearn.metrics import mean_absolute_error,mean_squared_error,r2_score,accu
 st.set_page_config(page_title="Life Expectancy ML",page_icon="📊",layout="wide")
 
 PROJECT_DIR=os.path.dirname(os.path.abspath(__file__))
-DATA_PATH=os.path.join(PROJECT_DIR,"dataset","Life Expectancy Data.csv")
+DATA_PATH=os.path.join(PROJECT_DIR,"Dataset","Life Expectancy Data.csv")
 
 @st.cache_data
 def load_data():
