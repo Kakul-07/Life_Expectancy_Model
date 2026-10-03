@@ -28,30 +28,15 @@ def load_data():
 def create_preprocessor(X):
     numeric_features=X.select_dtypes(exclude=["object"]).columns.tolist()
     categorical_features=X.select_dtypes(include=["object"]).columns.tolist()
-
-    numeric_pipeline=Pipeline([("imputer",SimpleImputer(strategy="median")),
-        ("scaler",StandardScaler())
-    ])
-
-    categorical_pipeline=Pipeline([("imputer",SimpleImputer(strategy="most_frequent")),
-        ("onehot",OneHotEncoder(handle_unknown="ignore"))
-    ])
-
-    return ColumnTransformer([("numeric",numeric_pipeline,numeric_features),
-        ("categorical",categorical_pipeline,categorical_features)
-    ])
-
+    numeric_pipeline=Pipeline([("imputer",SimpleImputer(strategy="median")), ("scaler",StandardScaler())])
+    categorical_pipeline=Pipeline([("imputer",SimpleImputer(strategy="most_frequent")),("onehot",OneHotEncoder(handle_unknown="ignore"))])
+    return ColumnTransformer([("numeric",numeric_pipeline,numeric_features),("categorical",categorical_pipeline,categorical_features)])
 def prepare_regression_data():
     df=load_data()
     X=df[selected_features]
     y=df["Life expectancy"]
-
-    X_train,X_test,y_train,y_test=train_test_split(
-        X,y,test_size=0.20,random_state=42
-    )
-
+    X_train,X_test,y_train,y_test=train_test_split(X,y,test_size=0.20,random_state=42)
     return X_train,X_test,y_train,y_test,create_preprocessor(X)
-
 def prepare_classification_data():
     df=load_data()
     X=df[selected_features]
