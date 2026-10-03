@@ -13,7 +13,16 @@ from sklearn.metrics import mean_absolute_error,mean_squared_error,r2_score,accu
 PROJECT_DIR=os.path.dirname(os.path.abspath(__file__))
 DATA_PATH=os.path.join(PROJECT_DIR,"Dataset","Life Expectancy Data.csv")
 
-selected_features=["Country","Year","Status","Adult Mortality","Alcohol","BMI","HIV/AIDS","GDP","Income composition of resources","Schooling"]
+selected_features=["HIV/AIDS",
+ "Adult Mortality",
+ "Income composition of resources",
+ "BMI",
+ "under-five deaths",
+ "thinness 5-9 years",
+ "Year",        
+"Schooling",
+"Country",
+"Alcohol"]
 
 @st.cache_data
 def load_data():
