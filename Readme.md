@@ -95,16 +95,18 @@ Feature importance was checked using **Random Forest with permutation importance
 The final selected features are:
 
 ```text
-HIV/AIDS
-Adult Mortality
-Income composition of resources
-BMI
-under-five deaths
-thinness 5-9 years
-Year
-Schooling
-Country
-Alcohol
+FEATURES=[
+    "HIV/AIDS",
+    "Schooling",
+    "Adult Mortality",
+    "Income composition of resources",
+    "under-five deaths",
+    "infant deaths",
+    "BMI",
+    "GDP",
+    "Diphtheria",
+    "thinness 1-19 years"
+]
 These features were selected based on the permutation-importance analysis performed in this project. The feature importance values can depend on the machine-learning model and the data used for the analysis, so these features are considered important for this project rather than universally important factors.
 
 The original dataset is not modified. The selected features are chosen in the Python code and are used by the final machine-learning models.

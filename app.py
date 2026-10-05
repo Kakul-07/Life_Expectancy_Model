@@ -4,7 +4,7 @@ import streamlit as st
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 from sklearn.compose import ColumnTransformer
-from sklearn.preprocessing import OneHotEncoder,StandardScaler
+from sklearn.preprocessing import StandardScaler,OneHotEncoder
 from sklearn.pipeline import Pipeline
 from sklearn.impute import SimpleImputer
 from sklearn.linear_model import LinearRegression,LogisticRegression
@@ -20,17 +20,17 @@ st.set_page_config(
 PROJECT_DIR=os.path.dirname(os.path.abspath(__file__))
 DATA_PATH=os.path.join(PROJECT_DIR,"Dataset","Life Expectancy Data.csv")
 
-selected_features=[
+FEATURES=[
     "HIV/AIDS",
+    "Schooling",
     "Adult Mortality",
     "Income composition of resources",
-    "BMI",
     "under-five deaths",
-    "thinness 5-9 years",
-    "Year",
-    "Schooling",
-    "Country",
-    "Alcohol"
+    "infant deaths",
+    "BMI",
+    "GDP",
+    "Diphtheria",
+    "thinness 1-19 years"
 ]
 
 @st.cache_data
@@ -44,7 +44,7 @@ def load_data():
 def train_models():
     df=load_data()
 
-    X=df[selected_features]
+    X=df[FEATURES]
     y_regression=df["Life expectancy"]
     y_classification=(df["Life expectancy"]>=65).astype(int)
 
@@ -131,15 +131,19 @@ def train_models():
 
 df=load_data()
 
-linear_model,logistic_model,mae,rmse,r2,accuracy,report,matrix=train_models()
+(
+    linear_model,
+    logistic_model,
+    mae,
+    rmse,
+    r2,
+    accuracy,
+    report,
+    matrix
+)=train_models()
 
 st.title("Life Expectancy Prediction")
-st.write("Predict life expectancy using important health, education and demographic features.")
-
-st.sidebar.header("Project Information")
-st.sidebar.write("Dataset: Life Expectancy Data")
-st.sidebar.write("Models: Linear Regression and Logistic Regression")
-st.sidebar.write("Selected Features: 10")
+st.write("Predict life expectancy using selected health, education and economic features.")
 
 tab1,tab2,tab3=st.tabs([
     "Prediction",
@@ -150,18 +154,19 @@ tab1,tab2,tab3=st.tabs([
 with tab1:
     st.header("Predict Life Expectancy")
 
-    st.write("The prediction uses the 10 features selected using permutation importance.")
+    st.write("Enter values for the 10 selected features.")
 
     col1,col2=st.columns(2)
 
     with col1:
-        country=st.selectbox(
-            "Country",
-            sorted(df["Country"].dropna().unique())
-        )
-
         hiv_aids=st.number_input(
             "HIV/AIDS",
+            min_value=0.0,
+            value=0.0
+        )
+
+        schooling=st.number_input(
+            "Schooling",
             min_value=0.0,
             value=0.0
         )
@@ -178,57 +183,57 @@ with tab1:
             value=0.0
         )
 
-        bmi=st.number_input(
-            "BMI",
-            min_value=0.0,
-            value=0.0
-        )
-
-    with col2:
         under_five_deaths=st.number_input(
             "under-five deaths",
             min_value=0.0,
             value=0.0
         )
 
-        thinness_5_9=st.number_input(
-            "thinness 5-9 years",
+    with col2:
+        infant_deaths=st.number_input(
+            "infant deaths",
             min_value=0.0,
             value=0.0
         )
 
-        year=st.number_input(
-            "Year",
-            min_value=2000,
-            max_value=2020,
-            value=2015,
-            step=1
-        )
-
-        schooling=st.number_input(
-            "Schooling",
+        bmi=st.number_input(
+            "BMI",
             min_value=0.0,
             value=0.0
         )
 
-        alcohol=st.number_input(
-            "Alcohol",
+        gdp=st.number_input(
+            "GDP",
+            min_value=0.0,
+            value=0.0
+        )
+
+        diphtheria=st.number_input(
+            "Diphtheria",
+            min_value=0.0,
+            max_value=100.0,
+            value=0.0
+        )
+
+        thinness=st.number_input(
+            "thinness 1-19 years",
             min_value=0.0,
             value=0.0
         )
 
     if st.button("Predict Life Expectancy",type="primary"):
+
         input_data=pd.DataFrame([{
             "HIV/AIDS":hiv_aids,
+            "Schooling":schooling,
             "Adult Mortality":adult_mortality,
             "Income composition of resources":income_composition,
-            "BMI":bmi,
             "under-five deaths":under_five_deaths,
-            "thinness 5-9 years":thinness_5_9,
-            "Year":year,
-            "Schooling":schooling,
-            "Country":country,
-            "Alcohol":alcohol
+            "infant deaths":infant_deaths,
+            "BMI":bmi,
+            "GDP":gdp,
+            "Diphtheria":diphtheria,
+            "thinness 1-19 years":thinness
         }])
 
         predicted_value=linear_model.predict(input_data)[0]
@@ -306,11 +311,7 @@ with tab3:
 
     st.dataframe(df)
 
-    st.subheader("Selected Features")
+    st.subheader("Features Used for Prediction")
 
-    st.write(
-        "The following 10 features are used by the final models:"
-    )
-
-    for feature in selected_features:
+    for feature in FEATURES:
         st.write(f"- {feature}")
