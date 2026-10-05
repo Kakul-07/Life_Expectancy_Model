@@ -36,7 +36,7 @@ FEATURES=[
 @st.cache_data
 def load_data():
     df=pd.read_csv(DATA_PATH)
-    df.columns=df.columns.str.strip()
+    df.columns=df.columns.str.strip().str.replace(r"\s+"," ",regex=True)
     df=df.dropna(subset=["Life expectancy"]).copy()
     return df
 
